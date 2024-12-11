@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Success</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+            color: #dff4d9;
+        }
+
+        .message-container {
+            border: 2px solid #dff4d9;
+            padding: 30px 50px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .message-container h1 {
+            font-size: 28px;
+            color: #dff4d9;
+            margin-bottom: 30px;
+        }
+
+        .message-container a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 25px;
+            background-color: transparent;
+            color: #dff4d9;
+            text-decoration: none;
+            border: 2px solid #dff4d9;
+            transition: all 0.3s ease;
+        }
+
+        .message-container a:hover {
+            background-color: #dff4d9;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+    <div class="message-container">
+        <h1>{{ message }}</h1>
+        <a href="/">Go to Home</a>
+        <a href="/login">Login</a>
+    </div>
+</body>
+</html>

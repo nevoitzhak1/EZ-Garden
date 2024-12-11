@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plants in {{ neighborhood }}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #222;
+            color: #dff4d9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 2px solid #dff4d9;
+            background-color: #333;
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #dff4d9;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        li {
+            margin: 10px 0;
+            padding: 15px;
+            border: 2px solid #dff4d9;
+            border-radius: 5px;
+            background-color: #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .button {
+            padding: 8px 15px;
+            border: 2px solid #dff4d9;
+            border-radius: 5px;
+            background: transparent;
+            color: #dff4d9;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #dff4d9;
+            color: #222;
+        }
+
+        .data-btn {
+            border: 2px solid #5c9eff;
+        }
+
+        .data-btn:hover {
+            background-color: #5c9eff;
+            color: white;
+        }
+        
+
+        .delete-btn {
+            border: 2px solid #ff5c5c;
+        }
+
+        .delete-btn:hover {
+            background-color: #ff5c5c;
+            color: white;
+        }
+
+        .add-btn {
+            display: block;
+            width: 150px;
+            margin: 20px auto 0;
+            padding: 10px;
+            text-align: center;
+            background-color: #dff4d9;
+            color: #222;
+            border: 2px solid #dff4d9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background-color: #b7e4a1;
+            border-color: #b7e4a1;
+        }
+
+
+        .back-home:hover {
+            background-color: #b2e6ad; /* צבע חדש */
+            color: #111; /* שינוי צבע הטקסט */
+        }
+        .back-home {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid #fff;
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .email-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #dff4d9;
+        }
+    </style>
+</head>
+<body>
+    <a href="/map" class="back-home">Back to Map </a>
+    <div class="email-display">
+        <p>Email: <strong>{{ user_email }}</strong></p>
+    </div>
+    <div class="container">
+        <h1>Plants in {{ neighborhood }}</h1>
+        <ul>
+            {% for plant in plants %}
+                <li>
+                    <div>
+                        {{ "Area: " }}{{ plant.area }}, {{ "Type: " }}{{ plant.type }}
+                    </div>
+                    <div>
+                        <!-- כפתור Data -->
+                        <a href="/plant_details/{{ plant.type }}">
+                            <button class="button data-btn">Data</button>
+                        </a>
+
+                        <!-- כפתור Delete -->
+                        <form action="/delete_plant/{{ plant.id }}" method="POST" style="display:inline;">
+                            <button class="button delete-btn">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div>
+            <a href="/add_plant" class="add-btn">Add Plant</a>
+        </div>
+    </div>
+</body>
+</html>

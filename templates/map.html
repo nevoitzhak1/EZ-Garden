@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neighborhood Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+        }
+        .popup-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .popup-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .popup-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // יצירת המפה עם תצוגה ראשונית
+        const map = L.map('map').setView([31.252973, 34.791462], 14); // קואורדינטות באר שבע
+
+        // הוספת שכבת מפה
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        // טעינת GeoJSON מהמיקום בשרת
+        fetch('/static/map.geojson') // ודא שהקובץ map.geojson נמצא בתיקיית static
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        const neighborhoodName = feature.properties.name || "Unknown Neighborhood";
+
+                        // הוספת חלונית (Popup)
+                        const popupContent = `
+                            <div class="popup-content">
+                                <strong>${neighborhoodName}</strong>
+                                <button class="popup-button" onclick="viewPlants('${neighborhoodName}')">View Plants</button>
+                            </div>
+                        `;
+
+                        layer.bindPopup(popupContent);
+
+                        // טיפול ב-hover עם popup
+                        let timeout; // משתנה עבור טיימר לסגירת חלונית
+                        layer.on('mouseover', function () {
+                            clearTimeout(timeout); // ביטול טיימר קיים
+                            layer.openPopup(); // פתיחת חלונית
+                        });
+
+                        layer.on('mouseout', function () {
+                            timeout = setTimeout(() => {
+                                layer.closePopup(); // סגירת חלונית לאחר 2 שניות
+                            }, 2000);
+                        });
+                    },
+                    style: {
+                        color: "#007BFF",
+                        weight: 2
+                    }
+                }).addTo(map);
+            });
+
+        // פונקציה שמפעילה מעבר לדף אחר בלחיצה על כפתור
+        function viewPlants(neighborhoodName) {
+            window.location.href = `/plants_by_area?neighborhood=${encodeURIComponent(neighborhoodName)}`;
+        }
+    </script>
+</body>
+</html>

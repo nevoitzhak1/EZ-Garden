@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant and Sensor Details</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #222;
+            color: #dff4d9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 50px;
+            font-size: 2rem;
+            color: #dff4d9;
+        }
+
+        .cards-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #333;
+            border: 2px solid #dff4d9;
+            color: #dff4d9;
+            padding: 20px;
+            width: 48%;
+            text-align: center;
+        }
+
+        .card h4 {
+            margin-bottom: 15px;
+            color: #dff4d9;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            margin: 5px 0;
+        }
+
+        .btn {
+            margin-top: 40px;
+            background-color: #dff4d9;
+            color: #222;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #dff4d9;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #b2e6ad;
+            color: #111;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plant and Sensor Details</h1>
+        <div class="cards-wrapper">
+            <!-- Plant Details -->
+            <div class="card">
+                <h4>Plant Details</h4>
+                <p><strong>Name:</strong> {{ plant['display_pid'] }}</p>
+                <p><strong>Category:</strong> {{ plant['category'] }}</p>
+                <p><strong>Temperature Range:</strong> {{ plant['min_temp'] }}°C - {{ plant['max_temp'] }}°C</p>
+                <p><strong>Soil Moisture:</strong> {{ plant['min_soil_moist'] }}% - {{ plant['max_soil_moist'] }}%</p>
+            </div>
+
+            <!-- Sensor Details -->
+            <div class="card">
+                <h4>Sensor Details</h4>
+                {% if sensor %}
+                    <p><strong>Timestamp:</strong> {{ sensor['sample_time_utc'] }}</p>
+                    <p><strong>Humidity:</strong> {{ sensor['Humidity'] }}%</p>
+                    <p><strong>Temperature:</strong> {{ sensor['Temperature'] }}°C</p>
+                    <p><strong>Battery Level:</strong> {{ sensor['Battery Level'] }}%</p>
+                {% else %}
+                    <p>No sensor data available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <a href="/home3" class="btn">Back to My Plants</a>
+        </div>
+    </div>
+</body>
+</html>

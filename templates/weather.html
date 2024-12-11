@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Location</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            background-color: #222;
+            color: #dff4d9;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 36px;
+            color: #dff4d9;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #dff4d9;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 250px;
+            border: 2px solid #dff4d9;
+            background-color: #333;
+            color: #dff4d9;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #aaa;
+        }
+
+        input:focus {
+            border-color: #dff4d9;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: #dff4d9;
+            border: 2px solid #dff4d9;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #dff4d9;
+            color: #222;
+        }
+
+        .email-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #dff4d9;
+        }
+        .btn {
+            margin-top: 40px;
+            background-color: #dff4d9;
+            color: #222;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #dff4d9;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #b2e6ad;
+            color: #111;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-display">
+        <p>Email: <strong>{{ user_email }}</strong></p>
+    </div>  
+
+    <h1>Enter Your Location</h1>
+    <form action="/weather" method="POST" class="form-container">   
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="Enter location" required>
+        <button type="submit" class="button">Submit</button>
+    </form>
+    <div>
+        <a href="/home_company_3" class="btn">Back home page</a>
+    </div>
+</body>
+</html>

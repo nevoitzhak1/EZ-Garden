@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Plants</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #222;
+            color: #f9f9f9;
+        }
+
+        .container {
+            width: 80%;
+            margin: 80px auto;
+            background-color: #333;
+            border: 2px solid #dff4d9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #dff4d9;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #dff4d9;
+            border-radius: 5px;
+            background-color: #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+
+        a {
+            text-decoration: none; 
+        }
+
+        .button {
+            padding: 8px 15px;
+            border: 2px solid #dff4d9;
+            border-radius: 5px;
+            background: transparent;
+            color: #dff4d9;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #dff4d9;
+            color: #222;
+        }
+
+        .delete-btn {
+            border: 2px solid #ff5c5c;
+        }
+
+        .delete-btn:hover {
+            background-color: #ff5c5c;
+            color: white;
+        }
+
+        .data-btn {
+            border: 2px solid #5c9eff;
+        }
+
+        .data-btn:hover {
+            background-color: #5c9eff;
+            color: white;
+        }
+        
+
+        .back-home:hover {
+            background-color: #b2e6ad; /* צבע חדש */
+            color: #111; /* שינוי צבע הטקסט */
+        }
+        .back-home {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid #fff;
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .add-btn {
+            margin-top: 20px;
+            background-color: #dff4d9;
+            color: #222;
+            font-size: 16px;
+            padding: 10px 25px;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .add-btn:hover {
+            background-color: #b2e6ad;
+        }
+
+        .email-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #dff4d9;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-home">Back to Home Page</a>
+    <div class="email-display">
+        <p>Email: <strong>{{ user_email }}</strong></p>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/export_to_excel" class="add-btn">Export to Excel</a>
+    </div>
+    <div class="container">
+        <h1>My Plants</h1>
+        <ul>
+            {% for plant in plants %}
+                <li>
+                    {{ "Area: " }}{{ plant.area }}, {{ "Type: " }}{{ plant.type }}
+                    <div>
+                        <!-- כפתור Data -->
+                        <a href="/plant_details/{{ plant.type }}">
+                            <button class="button data-btn">Data</button>
+                        </a>
+
+                        <!-- כפתור Delete -->
+                        <form action="/delete_plant/{{ plant.id }}" method="POST" style="display:inline;">
+                            <button class="button delete-btn" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div style="text-align: center;">
+            <a href="/add_plant" class="add-btn">Add Plant</a>
+        </div>
+    </div>
+</body>
+</html>

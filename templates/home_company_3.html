@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page with Buttons</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            background-color: #222;
+            color: #dff4d9;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 36px;
+            color: #dff4d9;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        a {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: #dff4d9;
+            border: 2px solid #dff4d9;
+            width: 220px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #dff4d9;
+            color: #222;
+        }
+
+        .email-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #dff4d9;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="email-display">
+        <p>Email: <strong>{{ user_email }}</strong></p>
+    </div>  
+    <h1>Choose an Option</h1>
+    <div class="button-container">
+        <a href="/employee_management">Employee Management</a>
+        <a href="/home3">Plant List</a>
+        <a href="/map">Map</a>
+        <a href="/weather">Weather</a>
+        <a href="/graphs_select_date">Grahps</a>
+    </div>
+</body>
+</html>

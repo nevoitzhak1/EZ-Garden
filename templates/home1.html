@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZ-Garden</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap" rel="stylesheet">
+    <style>
+        /* עיצוב בסיסי */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f0f0;
+
+            
+        }
+
+
+        /* מיכל ראשי */
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background-color: #2a2a2a;
+            border: 10px solid #d3f7cc;
+            box-sizing: border-box;
+            color: #d3f7cc;
+            position: relative;
+        }
+
+        /* כפתורים */
+        .buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+        }
+
+        .button {
+            background-color: white;
+            color: #2a2a2a;
+            border: 1px solid #d3f7cc;
+            padding: 10px 20px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 200;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #d3f7cc;
+        }
+
+        /* כותרת */
+        .header {
+            text-align: left;
+            margin: 30px 20px;
+        }
+
+        .title {
+            font-size: 80px;
+            margin: 0;
+            color: #d3f7cc;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            margin: 0;
+            color: #d3f7cc;
+        }
+
+        /* קונטיינר About */
+        .about-container {
+            width: 80%;
+            margin: 30px auto 0;
+            background-color: #2a2a2a;
+            border: 2px solid #d3f7cc;
+            padding: 20px;
+            color: #d3f7cc;
+            text-align: center;
+        }
+
+        .about-title {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .about-text {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+
+
+
+        
+    </style>
+</head>
+<body>
+
+    
+
+    <div class="container">
+        <!-- כפתורים עליונים -->
+        <div class="buttons">
+            <a href="/register_type" class="button">Register</a>
+            <a href="/login" class="button">Login</a>
+        </div>
+
+
+         
+
+        <!-- כותרת -->
+        <div class="header">
+            <h1 class="title">EZ-GARDEN</h1>
+            <p class="subtitle">Technologies</p>
+        </div>
+
+        
+
+        <!-- קונטיינר About -->
+        <div class="about-container">
+            <h2 class="about-title">About</h2>
+            <p class="about-text">
+                Welcome to EZ-Garden, a platform designed to revolutionize urban gardening and sustainable agriculture. 
+                Our goal is to provide smart solutions for managing your plants and optimizing resources.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
