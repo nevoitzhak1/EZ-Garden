@@ -72,6 +72,7 @@ def home():
     return render_template('home1.html')
 
 
+#comment 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
