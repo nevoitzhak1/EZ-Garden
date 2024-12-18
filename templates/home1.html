@@ -1,134 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EZ-Garden</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <style>
-        /* עיצוב בסיסי */
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background-color: #f0f0f0;
-
-            
+            background-color: #7fd4bb;
         }
 
-
-        /* מיכל ראשי */
-        .container {
-            width: 100%;
-            min-height: 100vh;
-            background-color: #2a2a2a;
-            border: 10px solid #d3f7cc;
-            box-sizing: border-box;
-            color: #d3f7cc;
-            position: relative;
+        .navbar-brand img {
+            margin-right: 10px;
         }
 
-        /* כפתורים */
-        .buttons {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-        }
-
-        .button {
-            background-color: white;
-            color: #2a2a2a;
-            border: 1px solid #d3f7cc;
-            padding: 10px 20px;
-            margin-left: 10px;
-            text-transform: uppercase;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 14px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 200;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #d3f7cc;
-        }
-
-        /* כותרת */
-        .header {
-            text-align: left;
-            margin: 30px 20px;
-        }
-
-        .title {
-            font-size: 80px;
-            margin: 0;
-            color: #d3f7cc;
-        }
-
-        .subtitle {
-            font-size: 20px;
-            margin: 0;
-            color: #d3f7cc;
-        }
-
-        /* קונטיינר About */
-        .about-container {
-            width: 80%;
-            margin: 30px auto 0;
-            background-color: #2a2a2a;
-            border: 2px solid #d3f7cc;
-            padding: 20px;
-            color: #d3f7cc;
+        .hero-section {
+            background-color: #f8f9fa;
+            color: #000;
+            padding: 4rem 1rem;
             text-align: center;
         }
 
-        .about-title {
-            font-size: 36px;
-            margin-bottom: 15px;
+        .hero-section h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
         }
 
-        .about-text {
-            font-size: 18px;
+        .hero-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section .btn-primary {
+            background-color: #d3f7cc;
+            border: none;
+            color: #2a2a2a;
+        }
+
+        .hero-section .btn-primary:hover {
+            background-color: #b9e2a8;
+        }
+
+        .about-section {
+            padding: 3rem 1rem;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-section p {
+            font-size: 1.25rem;
             line-height: 1.6;
         }
 
-
-
-
-        
+        .btn-login,
+        .btn-register {
+            margin-left: 10px;
+            font-size: 14px;
+            padding: 10px 20px;
+        }
     </style>
 </head>
+
 <body>
-
-    
-
-    <div class="container">
-        <!-- כפתורים עליונים -->
-        <div class="buttons">
-            <a href="/register_type" class="button">Register</a>
-            <a href="/login" class="button">Login</a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="box-seam.svg" alt="" height="30"> EZ-Garden
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/register_type" class="btn btn-outline-success btn-register">Register</a>
+                    <a href="/login" class="btn btn-outline-primary btn-login">Login</a>
+                </div>
+            </div>
         </div>
+    </nav>
 
-
-         
-
-        <!-- כותרת -->
-        <div class="header">
-            <h1 class="title">EZ-GARDEN</h1>
-            <p class="subtitle">Technologies</p>
-        </div>
-
-        
-
-        <!-- קונטיינר About -->
-        <div class="about-container">
-            <h2 class="about-title">About</h2>
-            <p class="about-text">
-                Welcome to EZ-Garden, a platform designed to revolutionize urban gardening and sustainable agriculture. 
-                Our goal is to provide smart solutions for managing your plants and optimizing resources.
-            </p>
-        </div>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1>EZ-GARDEN</h1>
+        <p>Your trusted partner for smart urban gardening solutions.</p>
+        <a href="#" class="btn btn-primary btn-lg">Learn More</a>
     </div>
+
+    <!-- About Section -->
+    <div class="about-section">
+        <h2>About EZ-Garden</h2>
+        <p>
+            Welcome to EZ-Garden, a platform designed to revolutionize urban gardening and sustainable agriculture.
+            Our goal is to provide smart solutions for managing your plants and optimizing resources.
+        </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>
