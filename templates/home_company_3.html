@@ -1,75 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page with Buttons</title>
+    <title>Album Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             font-family: 'Poppins', sans-serif;
-            background-color: #222;
-            color: #dff4d9;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 36px;
-            color: #dff4d9;
-        }
-
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        a {
-            display: block;
-            text-decoration: none;
-            text-align: center;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #333;
-            color: #dff4d9;
-            border: 2px solid #dff4d9;
-            width: 220px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        a:hover {
-            background-color: #dff4d9;
-            color: #222;
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
 
         .email-display {
             position: absolute;
             top: 10px;
             left: 10px;
-            color: #dff4d9;
         }
 
-
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
     </style>
 </head>
-<body>
+
+<body data-bs-theme="light">
+    <!-- Email Display -->
     <div class="email-display">
         <p>Email: <strong>{{ user_email }}</strong></p>
-    </div>  
-    <h1>Choose an Option</h1>
-    <div class="button-container">
-        <a href="/employee_management">Employee Management</a>
-        <a href="/home3">Plant List</a>
-        <a href="/map">Map</a>
-        <a href="/weather">Weather</a>
-        <a href="/graphs_select_date">Grahps</a>
     </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="themeToggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Theme
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeToggle">
+            <li><button class="dropdown-item" onclick="setTheme('light')">Light</button></li>
+            <li><button class="dropdown-item" onclick="setTheme('dark')">Dark</button></li>
+            <li><button class="dropdown-item" onclick="setTheme('auto')">Auto</button></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">Album Example</h1>
+                    <p class="lead text-body-secondary">Explore the available features and navigate easily with the buttons below.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Album Cards -->
+        <div class="album py-5 bg-body-tertiary">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <!-- Card 1 -->
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="/static/company3_photos/employee_management.jpg" class="card-img-top" alt="Employee Management">
+                            <div class="card-body">
+                                <p class="card-text">Manage your employees effectively with the Employee Management tool.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/employee_management" class="btn btn-sm btn-primary">Go</a>
+                                    <small class="text-body-secondary">Updated recently</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="/static/company3_photos/plant_list.jpg" class="card-img-top" alt="Plant List">
+                            <div class="card-body">
+                                <p class="card-text">Browse the full list of plants available in your system.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/home3" class="btn btn-sm btn-primary">Go</a>
+                                    <small class="text-body-secondary">Updated yesterday</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="/static/company3_photos/company3_map.jpg" class="card-img-top" alt="Map">
+                            <div class="card-body">
+                                <p class="card-text">View the map of the garden with detailed plant locations.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/map" class="btn btn-sm btn-primary">Go</a>
+                                    <small class="text-body-secondary">Updated 2 days ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="/static/company3_photos/company_weather.jpg" class="card-img-top" alt="Weather">
+                            <div class="card-body">
+                                <p class="card-text">Check the current weather to optimize your gardening.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/weather" class="btn btn-sm btn-primary">Go</a>
+                                    <small class="text-body-secondary">Updated today</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="/static/company3_photos/company_graphs.jpg" class="card-img-top" alt="Graphs">
+                            <div class="card-body">
+                                <p class="card-text">Analyze data trends with powerful graphing tools.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/graphs_select_date" class="btn btn-sm btn-primary">Go</a>
+                                    <small class="text-body-secondary">Updated recently</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function setTheme(theme) {
+            if (theme === 'auto') {
+                document.body.removeAttribute('data-bs-theme');
+            } else {
+                document.body.setAttribute('data-bs-theme', theme);
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
