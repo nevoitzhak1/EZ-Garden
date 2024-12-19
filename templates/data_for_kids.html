@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #7fd4bb;
+            color: #333;
+        }
+
+        header {
+            background-color: #7fd4bb;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header-content {
+            display: flex; /* Enable flexbox for horizontal alignment */
+            justify-content: center; /* Center the content horizontally */
+            align-items: center; /* Align items vertically */
+            gap: 10px; /* Add spacing between the logo and the header */
+}
+
+.logo {
+    height: 50px; /* Ensure the logo size is consistent */
+}
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .project-card .content {
+            padding: 15px;
+        }
+
+        .project-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .project-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #666;
+        }
+        .project-card a {
+    display: block; /* Makes the link cover the entire card */
+    text-decoration: none; /* Removes underline from links */
+    color: inherit; /* Ensures the text color doesn't change */
+}
+
+.project-card a:hover {
+    text-decoration: none;
+    color: #007bff; /* Optional: Add a hover effect for links */
+}
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #7fd4bb;
+            color: #333;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="box-seam.svg" alt="" height="30"> EZ-Garden
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header>
+        <div class="header-content">
+            <img src="/static/logo.svg" height="50" alt="Logo" class="logo">
+            <h1>Creative Kids Projects</h1>
+        </div>
+        <p>Fun, creative ideas for kids to explore and enjoy!</p>
+    </header>
+
+    <div class="container">
+        <div class="project-grid">
+            <div class="project-card">
+                <a href="planting-experiment.html">
+                    <img src="/static/kids_planting.jpg" alt="Planting Experiment" width="200" height="100">
+                    <div class="content">
+                        <h3>Planting Experiment</h3>
+                        <p>Get started planting while having fun!</p>
+                    </div>
+                </a>
+            </div>
+            <div class="project-card">
+                <a href="saving-water-tips.html">
+                    <img src="/static/kids_saving_water.png" alt="Saving Water Tips" width="300" height="200">
+                    <div class="content">
+                        <h3>Saving Water Tips</h3>
+                        <p>Learn how to easily save water</p>
+                    </div>
+                </a>
+            </div>
+            <div class="project-card">
+                <a href="water-saved-stats.html">
+                    <img src="/static/see_how_much_water_we_saved.png" alt="Water Saved Statistics">
+                    <div class="content">
+                        <h3>See How Much Water We Saved</h3>
+                        <p>Take a look at the graphs and see how we save the planet</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 EZ-Garden. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+
+</html>

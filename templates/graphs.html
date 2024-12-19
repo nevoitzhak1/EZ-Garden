@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature & Humidity and Water Consumption Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1 style="text-align: center;">Dashboard</h1>
+
+    <!-- Temperature & Humidity Chart -->
+    <div style="width: 80%; margin: auto; margin-bottom: 50px;">
+        <h2>Temperature & Humidity</h2>
+        <canvas id="tempHumidityChart"></canvas>
+    </div>
+
+    <!-- Water Consumption Chart -->
+    <div style="width: 80%; margin: auto;">
+        <h2>Water Consumption</h2>
+        <canvas id="waterConsumptionChart"></canvas>
+    </div>
+
+
+    <script>
+        // Fetch and display Temperature & Humidity Data
+        async function fetchTempHumidityData() {
+            try {
+                const response = await fetch('/data_sensor_by_date'); // כתובת ה-API
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+                const data = await response.json();
+        
+                // שלב 2: עיבוד הנתונים
+                const labels = data.map(entry => new Date(entry.SampleTime).toLocaleString()); // זמני מדידה
+                const temperatures = data.map(entry => entry.Temperature); // טמפרטורות
+                const humidities = data.map(entry => entry.Humidity); // לחות
+        
+                // שלב 3: יצירת הגרף
+                const ctx = document.getElementById('tempHumidityChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Temperature (°C)',
+                                data: temperatures,
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                fill: true,
+                            },
+                            {
+                                label: 'Humidity (%)',
+                                data: humidities,
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                fill: true,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Sample Time'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Value'
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching Temperature & Humidity Data:", error);
+            }
+        }
+
+        // Fetch and display Water Consumption Data
+        async function fetchWaterConsumptionData() {
+            const response = await fetch('/data_water');
+            const data = await response.json();
+
+            const labels = data.dates; // תאריכים כציר ה-X
+            const beforeInstallation = data.before_installation; // לפני התקנה
+            const afterInstallation = data.after_installation; // אחרי התקנה
+
+            const ctx = document.getElementById('waterConsumptionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line', // גרף קווי
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Before Installation (liters)',
+                            data: beforeInstallation,
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                            fill: true,
+                        },
+                        {
+                            label: 'After Installation (liters)',
+                            data: afterInstallation,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Water Consumption (liters)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fetch both data sets and render the charts
+        fetchTempHumidityData();
+        fetchWaterConsumptionData();
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Date Input</title>
+    <title>Graphs by Dates and Locations</title>
     <style>
         body {
             margin: 0;
@@ -22,6 +22,8 @@
             padding: 20px 40px;
             border: 2px solid #dff4d9;
             text-align: center;
+            width: 400px;
+            box-sizing: border-box;
         }
 
         h2 {
@@ -36,27 +38,18 @@
             font-size: 16px;
         }
 
-        input[type="date"] {
+        select {
             padding: 8px;
             border: 2px solid #dff4d9;
             background-color: #444;
             color: #dff4d9;
             font-size: 16px;
-            width: 100%;
+            width: calc(50% - 10px);
+            margin-right: 10px;
             box-sizing: border-box;
         }
 
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-        }
-
-        input[type="date"]:focus {
-            outline: none;
-            border-color: #b2e6ad;
-        }
-
         button {
-            margin-top: 20px;
             padding: 10px 20px;
             background-color: #dff4d9;
             color: #222;
@@ -66,24 +59,123 @@
             transition: background-color 0.3s ease-in-out;
             width: 100%;
             box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         button:hover {
             background-color: #b2e6ad;
         }
+
+        .date-container, .location-container {
+            margin-top: 10px;
+        }
+
+        .date-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .date-row button {
+            margin-left: 10px;
+            width: auto;
+        }
     </style>
+    <script>
+        function addDateRow() {
+            const container = document.querySelector('.date-container');
+            const div = document.createElement('div');
+            div.className = 'date-row';
+
+            div.innerHTML = `
+                <select name="year[]">
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+                <select name="month[]">
+                    <option value="january">January</option>
+                    <option value="february">February</option>
+                    <option value="march">March</option>
+                    <option value="april">April</option>
+                    <option value="may">May</option>
+                    <option value="june">June</option>
+                    <option value="july">July</option>
+                    <option value="august">August</option>
+                    <option value="september">September</option>
+                    <option value="october">October</option>
+                    <option value="november">November</option>
+                    <option value="december">December</option>
+                </select>
+                <button type="button" onclick="removeElement(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function addLocationDropdown() {
+            const container = document.querySelector('.location-container');
+            const div = document.createElement('div');
+            div.className = 'date-row';
+
+            div.innerHTML = `
+                <select name="locations[]">
+                    <option value="Neighborhood A">Neighborhood A</option>
+                    <option value="Neighborhood B">Neighborhood B</option>
+                    <option value="Neighborhood C">Neighborhood C</option>
+                </select>
+                <button type="button" onclick="removeElement(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeElement(button) {
+            button.parentElement.remove();
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h2>Choose Dates</h2>
-        <form action="#" method="POST">
-            <label for="start-date">Start Date:</label>
-            <input type="date" id="start-date" name="start-date"><br><br>
+        <h2>Graphs by Dates and Locations</h2>
+        <form action="graphs.html" method="GET">
+            <label for="dates">Add Year and Month:</label>
+            <div class="date-container">
+                <div class="date-row">
+                    <select name="year[]">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                    <select name="month[]">
+                        <option value="january">January</option>
+                        <option value="february">February</option>
+                        <option value="march">March</option>
+                        <option value="april">April</option>
+                        <option value="may">May</option>
+                        <option value="june">June</option>
+                        <option value="july">July</option>
+                        <option value="august">August</option>
+                        <option value="september">September</option>
+                        <option value="october">October</option>
+                        <option value="november">November</option>
+                        <option value="december">December</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" onclick="addDateRow()">Add Year and Month</button>
 
-            <label for="end-date">End Date:</label>
-            <input type="date" id="end-date" name="end-date"><br><br>
+            <label for="locations">Add Locations for Comparison:</label>
+            <div class="location-container">
+                <div class="date-row">
+                    <select name="locations[]">
+                        <option value="Neighborhood A">Neighborhood A</option>
+                        <option value="Neighborhood B">Neighborhood B</option>
+                        <option value="Neighborhood C">Neighborhood C</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" onclick="addLocationDropdown()">Add Location</button>
 
-            <button type="submit">Submit</button>
+            <button type="submit">Generate Graphs</button>
         </form>
     </div>
 </body>
