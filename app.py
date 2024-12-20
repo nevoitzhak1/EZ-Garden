@@ -13,7 +13,14 @@ from firebase_admin import credentials, firestore
 from flask import Flask, render_template, request, redirect, session, send_from_directory,Response,jsonify
 from flask_caching import Cache
 from openplantbook_sdk import OpenPlantBookApi, MissingClientIdOrSecret, ValidationError
-
+import os
+if not os.path.exists("static"):
+    os.makedirs("static")
+    from flask import Flask, render_template
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 
 
 SENSOR_API_LOGIN_URL = "https://atapi.atomation.net/auth/login"
@@ -840,6 +847,75 @@ def export_graph():
             headers={"Content-Disposition": "attachment;filename=graph_data.pdf"}
         )
   
+# Ensure the 'static' directory exists
+if not os.path.exists("static"):
+    os.makedirs("static")
+
+# Save the plot
+plt.savefig("static/monthly_trends.png")
+
+
+app = Flask(__name__, static_folder="static")
+
+
+def load_data():
+    data = {
+        "Month": [
+            "January", "February", "March", "April",
+            "May", "June", "July", "August",
+            "September", "October", "November", "December"
+        ],
+        "Start Date": [
+            "2023-01-01", "2023-02-01", "2023-03-01", "2023-04-01",
+            "2023-05-01", "2023-06-01", "2023-07-01", "2023-08-01",
+            "2023-09-01", "2023-10-01", "2023-11-01", "2023-12-01"
+        ],
+        "End Date": [
+            "2023-01-31", "2023-02-28", "2023-03-31", "2023-04-30",
+            "2023-05-31", "2023-06-30", "2023-07-31", "2023-08-31",
+            "2023-09-30", "2023-10-31", "2023-11-30", "2023-12-31"
+        ],
+        "Temperature (°C)": [10, 15, 20, 25, 30, 35, 40, 55, 45, 35, 25, 15],
+        "Humidity (%)": [25, 30, 100, 45, 50, 100, 55, 60, 100, 75, 80, 100]
+    }
+    return pd.DataFrame(data)
+
+
+def plot_trends(data):
+    plt.figure(figsize=(12, 8))
+    plt.plot(data["Month"], data["Temperature (°C)"], label="Temperature (°C)", color="red", marker="o")
+    plt.plot(data["Month"], data["Humidity (%)"], label="Humidity (%)", color="blue", marker="o")
+    plt.title("Monthly Trends for Temperature and Humidity")
+    plt.xlabel("Month")
+    plt.ylabel("Value")
+    plt.legend()
+    plt.grid(True)
+    plt.savefig("static/monthly_trends.png")
+    plt.close()
+
+
+@app.route("/Maintenance")
+def home():
+    data = load_data()
+    plot_trends(data)
+
+    alerts_by_month = {
+        "July": "תחזוקה מתקרבת: טמפרטורה גבוהה, יש לדאוג למטפים.",
+        "August": "תחזוקה דחופה: טמפרטורה מסוכנת, יש לדאוג למטפים.",
+        "March": "תחזוקה דחופה: לחות גבוהה, יש לדאוג לצינורות.",
+        "June": "תחזוקה דחופה: לחות גבוהה, יש לדאוג לצינורות.",
+        "September": "תחזוקה דחופה: לחות גבוהה, יש לדאוג לצינורות.",
+        "December": "תחזוקה דחופה: לחות גבוהה, יש לדאוג לצינורות."
+    }
+
+    return render_template(
+        "index.html",
+        temperature_data=data[["Month", "Start Date", "End Date", "Temperature (°C)"]].to_dict(orient="records"),
+        humidity_data=data[["Month", "Start Date", "End Date", "Humidity (%)"]].to_dict(orient="records"),
+        graph_url="/static/monthly_trends.png",
+        alerts_by_month=alerts_by_month
+    )
+
 
   
 

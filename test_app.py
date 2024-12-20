@@ -92,11 +92,9 @@ class TestGetWater(unittest.TestCase):
                 mock_get_sensor_api_token.assert_called_once()
                 mock_get_sensor_by_date.assert_called_once_with("mock_token", "E9:19:79:09:A1:AD", datetime(2024, 12, 10), datetime(2024, 12, 19))
 
-if __name__ == "__main__":
-    unittest.main()
 
 
-=======
+
 #sahar's unittest:
 
     def test_send_email_no_email(self):
@@ -107,7 +105,8 @@ if __name__ == "__main__":
   
 
 #jimmy unittest:
-   def test_send_email_missing_email(self):
+    def test_send_email_missing_email(self):
+        
     # Simulate a request with missing email
       request = {'email': None}
       response, status_code = send_email(request)
@@ -115,4 +114,30 @@ if __name__ == "__main__":
       self.assertEqual(response.get('error'), 'Email is required')
 
       
->>>>>>> Stashed changes
+
+
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app import load_data  # מייבאים את הפונקציה מהקובץ app.py
+
+def test_load_data():
+    df = load_data()
+    
+    # בדוק אם ה-DataFrame לא ריק
+    assert not df.empty, "DataFrame is empty"
+    
+    # בדוק אם יש 12 שורות ו-5 עמודות
+    assert df.shape == (12, 5), f"DataFrame shape is {df.shape}, but expected (12, 5)"
+    
+    # בדוק אם כל השמות של העמודות תקינים
+    expected_columns = ['Month', 'Start Date', 'End Date', 'Temperature (°C)', 'Humidity (%)']
+    assert list(df.columns) == expected_columns, f"Columns are {list(df.columns)}, but expected {expected_columns}"
+    
+    # בדוק אם ערכי הטמפרטורה נכונים
+    expected_temperatures = [10, 15, 20, 25, 30, 35, 40, 55, 45, 35, 25, 15]
+    assert df["Temperature (°C)"].tolist() == expected_temperatures, "Temperature values are incorrect"
+
+if __name__ == "__main__":
+    unittest.main()
