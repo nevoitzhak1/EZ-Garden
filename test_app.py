@@ -1,5 +1,8 @@
 import unittest
-from app import app
+from unittest.mock import patch, mock_open
+from flask import Flask, jsonify
+import json
+import app 
 
 class TestFlaskApp(unittest.TestCase):
     def setUp(self):
@@ -26,3 +29,35 @@ class TestFlaskApp(unittest.TestCase):
                 'type': 'Rose'
             })
             self.assertEqual(response.status_code, 302)  # Redirect after success
+
+
+
+
+class TestGetWater(unittest.TestCase):
+    def setUp(self):
+        # מגדיר את אפליקציית Flask לבדיקה
+        app.app.testing = True
+        self.client = app.app.test_client()
+
+    @patch("builtins.open", new_callable=mock_open, read_data='{"dates": ["2023-12-01", "2023-12-02"], "before_installation": [100, 200], "after_installation": [80, 150]}')
+    def test_get_water(self, mock_file):
+        # ביצוע בקשה לנתיב /data_water
+        response = self.client.get("/data_water")
+
+        # בדיקה אם הבקשה הצליחה
+        self.assertEqual(response.status_code, 200)
+
+        # בדיקה אם התגובה מחזירה את הנתונים הצפויים
+        expected_data = {
+            "dates": ["2023-12-01", "2023-12-02"],
+            "before_installation": [100, 200],
+            "after_installation": [80, 150],
+        }
+        self.assertEqual(response.json, expected_data)
+
+        # בדיקה אם הקובץ נפתח כראוי
+        mock_file.assert_called_once_with("static/water_consumption.json", "r")
+
+
+if __name__ == "__main__":
+    unittest.main()
