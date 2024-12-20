@@ -39,6 +39,22 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .card {
+            display: flex;
+            flex-direction: column; /* Ensures the card content is stacked vertically */
+            justify-content: space-between; /* Space between content and footer */
+            min-height: 100%; /* Makes all cards the same height */
+        }
+
+        .card-body {
+            flex-grow: 1;
+        }
+        .card img {
+            height: 200px; /* Ensures images are consistent */
+            object-fit: cover; /* Prevents image distortion */
+            border-bottom: 1px solid #ddd; /* Optional: separator line */
+        }
     </style>
 </head>
 
@@ -65,98 +81,94 @@
         <section class="py-5 text-center container">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">Album Example</h1>
-                    <p class="lead text-body-secondary">Explore the available features and navigate easily with the buttons below.</p>
+                    <h1 class="fw-light">Hello manager!</h1>
+                    <p class="lead text-body-secondary"></p>
                 </div>
             </div>
         </section>
 
         <!-- Album Cards -->
-        <div class="album py-5 bg-body-tertiary">
-            <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    <!-- Card 1 -->
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/static/employee_management.jpg" class="card-img-top" alt="Employee Management">
-                            <div class="card-body">
-                                <p class="card-text">Manage your employees effectively with the Employee Management tool.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/employee_management" class="btn btn-sm btn-primary">Go</a>
-                                    <small class="text-body-secondary">Updated recently</small>
-                                </div>
-                            </div>
-                        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <!-- Card 1 -->
+            <div class="col">
+                <div class="card shadow-sm h-100 d-flex flex-column">
+                    <img src="/static/employee_management.jpg" class="card-img-top" alt="Employee Management">
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text flex-grow-1">Manage your employees effectively with the Employee Management tool.</p>
                     </div>
-
-                    <!-- Card 2 -->
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/static/plant_list.jpg" class="card-img-top" alt="Plant List">
-                            <div class="card-body">
-                                <p class="card-text">Browse the full list of plants available in your system.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/home3" class="btn btn-sm btn-primary">Go</a>
-                                    <small class="text-body-secondary">Updated yesterday</small>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-footer text-center">
+                        <a href="/employee_management" class="btn btn-sm btn-primary">Go</a>
+                        <small class="text-muted d-block mt-1">Updated recently</small>
                     </div>
-
-                    <!-- Card 3 -->
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/static/company3_map.jpg" class="card-img-top" alt="Map">
-                            <div class="card-body">
-                                <p class="card-text">View the map of the garden with detailed plant locations.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/map" class="btn btn-sm btn-primary">Go</a>
-                                    <small class="text-body-secondary">Updated 2 days ago</small>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+        
+            <!-- Card 2 -->
+            <div class="col">
+                <div class="card shadow-sm h-100 d-flex flex-column">
+                    <img src="/static/plant_list.jpg" class="card-img-top" alt="Plant List">
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text flex-grow-1">Browse the full list of plants available in your system.</p>
                     </div>
-
-                    <!-- Card 4 -->
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/static/company_weather.jpg" class="card-img-top" alt="Weather">
-                            <div class="card-body">
-                                <p class="card-text">Check the current weather to optimize your gardening.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/weather" class="btn btn-sm btn-primary">Go</a>
-                                    <small class="text-body-secondary">Updated today</small>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-footer text-center">
+                        <a href="/home3" class="btn btn-sm btn-primary">Go</a>
+                        <small class="text-muted d-block mt-1">Updated yesterday</small>
                     </div>
-
-                    <!-- Card 5 -->
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/static/company_graphs.jpg" class="card-img-top" alt="Graphs">
-                            <div class="card-body">
-                                <p class="card-text">Analyze data trends with powerful graphing tools.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/graphs_select_date" class="btn btn-sm btn-primary">Go</a>
-                                    <small class="text-body-secondary">Updated recently</small>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+        
+            <!-- Card 3 -->
+            <div class="col">
+                <div class="card shadow-sm h-100 d-flex flex-column">
+                    <img src="/static/company3_map.jpg" class="card-img-top" alt="Map">
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text flex-grow-1">View the map of the garden with detailed plant locations.</p>
                     </div>
-
-                    <!-- Card 6 -->
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/static/educational_projects.jpg" class="card-img-top" alt="Educational Projects">
-                            <div class="card-body">
-                                <p class="card-text">Build educational projects and watch saving water graphs.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/data_for_kids" class="btn btn-sm btn-primary">Go</a>
-                                    <small class="text-body-secondary">Updated today</small>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-footer text-center">
+                        <a href="/map" class="btn btn-sm btn-primary">Go</a>
+                        <small class="text-muted d-block mt-1">Updated 2 days ago</small>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Card 4 -->
+            <div class="col">
+                <div class="card shadow-sm h-100 d-flex flex-column">
+                    <img src="/static/company_weather.jpg" class="card-img-top" alt="Weather">
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text flex-grow-1">Check the current weather to optimize your gardening.</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="/weather" class="btn btn-sm btn-primary">Go</a>
+                        <small class="text-muted d-block mt-1">Updated today</small>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Card 5 -->
+            <div class="col">
+                <div class="card shadow-sm h-100 d-flex flex-column">
+                    <img src="/static/company_graphs.jpg" class="card-img-top" alt="Graphs">
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text flex-grow-1">Analyze data trends with powerful graphing tools.</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="/graphs_select_date" class="btn btn-sm btn-primary">Go</a>
+                        <small class="text-muted d-block mt-1">Updated recently</small>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Card 6 -->
+            <div class="col">
+                <div class="card shadow-sm h-100 d-flex flex-column">
+                    <img src="/static/educational_projects.jpg" class="card-img-top" alt="Educational Projects">
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text flex-grow-1">Build educational projects and watch saving water graphs.</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="/data_for_kids" class="btn btn-sm btn-primary">Go</a>
+                        <small class="text-muted d-block mt-1">Updated today</small>
                     </div>
                 </div>
             </div>
