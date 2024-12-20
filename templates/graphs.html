@@ -48,6 +48,72 @@
         button:hover {
             background-color: #0056b3;
         }
+         .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .text-input {
+            width: 200px;
+            height: 30px;
+            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .submit-button {
+            width: 100px;
+            height: 35px;
+            background-color: lightblue;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .submit-button:hover {
+            background-color: deepskyblue;
+        }
+        .data-transfer {
+            margin: 30px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .text-input {
+            width: 200px;
+            height: 30px;
+            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .submit-button {
+            width: 100px;
+            height: 35px;
+            background-color: lightblue;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .submit-button:hover {
+            background-color: deepskyblue;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -61,6 +127,13 @@
             <button onclick="exportToExcel()">Export to Excel</button>
             <button onclick="exportToPDF()">Export to PDF</button>
         </div>
+        <div class="data-transfer">Transfer Data</div>
+
+        <form class="form-container" onsubmit="sendFiles(event)">
+            <input type="email" id="emailInput" name="email" class="text-input" placeholder="Enter Email" required>
+            <button type="submit" class="submit-button">Send</button>
+        </form>
+        
     </div>
     <script>
         // Function to get URL parameters
@@ -156,6 +229,7 @@
             createGraph(filteredData, filteredMonths);
         }
 
+         
         // Export to Excel
         function exportToExcel() {
             const worksheet = XLSX.utils.json_to_sheet(
@@ -171,6 +245,51 @@
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Graph Data');
             XLSX.writeFile(workbook, 'GraphData.xlsx');
         }
+        function exportToExcel1() {
+            const worksheet = XLSX.utils.json_to_sheet([{Data: 'Sample Data'}]);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Graph Data');
+            XLSX.writeFile(workbook, 'GraphData.xlsx');
+        }
+
+        async function exportToPDF1() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            pdf.text('Graph Data', 10, 10);
+            pdf.save('GraphData.pdf');
+        }
+
+        async function sendFiles(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('emailInput').value;
+            if (!email) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                });
+
+                if (response.ok) {
+                    alert(`Files sent successfully to: ${email}`);
+                } else {
+                    const errorData = await response.json();
+                    alert(`Failed to send files: ${errorData.error}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while sending files.');
+            }
+        }
+
+
 
         // Export to PDF with the graph image
         async function exportToPDF() {
