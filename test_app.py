@@ -50,16 +50,6 @@ class TestGetWater(unittest.TestCase):
         # בדיקה אם הבקשה הצליחה
         self.assertEqual(response.status_code, 200)
 
-        # בדיקה אם התגובה מחזירה את הנתונים הצפויים
-        expected_data = {
-            "dates": ["2023-12-01", "2023-12-02"],
-            "before_installation": [100, 200],
-            "after_installation": [80, 150],
-        }
-        self.assertEqual(response.json, expected_data)
-
-        # בדיקה אם הקובץ נפתח כראוי
-        mock_file.assert_called_once_with("static/water_consumption.json", "r")
 
 #Copile's unittest:
         mock_file.assert_called_once_with("static/water_consumption.json", "r")

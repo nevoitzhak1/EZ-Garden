@@ -843,29 +843,6 @@ def export_graph():
 
   
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 with open("static/water_consumption.json", "r") as file:
     data_water = json.load(file)
     
