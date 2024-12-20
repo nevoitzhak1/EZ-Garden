@@ -97,7 +97,7 @@ class TestGetWater(unittest.TestCase):
 
 #sahar's unittest:
 
-from app import app  # החלף בייבוא המתאים לפרויקט שלך
+from app import app 
 
 class TestSendEmail(unittest.TestCase):
 
