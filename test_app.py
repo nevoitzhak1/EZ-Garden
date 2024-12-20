@@ -97,10 +97,23 @@ class TestGetWater(unittest.TestCase):
 
 #sahar's unittest:
 
+from app import app  # החלף בייבוא המתאים לפרויקט שלך
+
+class TestSendEmail(unittest.TestCase):
+
+    def setUp(self):
+        # יצירת לקוח לבדיקה
+        self.app = app.test_client()
+        self.app.testing = True
+
     def test_send_email_no_email(self):
-        # Sending a request without an email
+        # שליחת בקשה ללא כתובת מייל
         response = self.app.post('/send-email', json={})
+        
+        # בדיקה אם סטטוס הקוד נכון
         self.assertEqual(response.status_code, 400)
+
+        # בדיקה אם הודעת השגיאה נכונה
         self.assertEqual(response.json, {'error': 'Email is required'})
   
 
