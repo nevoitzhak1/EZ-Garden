@@ -81,6 +81,9 @@
             width: auto;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
         function addDateRow() {
             const container = document.querySelector('.date-container');
@@ -94,18 +97,18 @@
                     <option value="2025">2025</option>
                 </select>
                 <select name="month[]">
-                    <option value="january">January</option>
-                    <option value="february">February</option>
-                    <option value="march">March</option>
-                    <option value="april">April</option>
-                    <option value="may">May</option>
-                    <option value="june">June</option>
-                    <option value="july">July</option>
-                    <option value="august">August</option>
-                    <option value="september">September</option>
-                    <option value="october">October</option>
-                    <option value="november">November</option>
-                    <option value="december">December</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
                 </select>
                 <button type="button" onclick="removeElement(this)">Remove</button>
             `;
@@ -131,12 +134,40 @@
         function removeElement(button) {
             button.parentElement.remove();
         }
+
+        // Export to PDF
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            pdf.text('Graphs by Dates and Locations', 10, 10);
+
+            const canvas = document.getElementById('graphCanvas');
+            if (canvas) {
+                const graphImage = canvas.toDataURL('image/png');
+                pdf.addImage(graphImage, 'PNG', 10, 20, 180, 100);
+            }
+
+            pdf.save('GraphsByDatesAndLocations.pdf');
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            const worksheet = XLSX.utils.json_to_sheet([
+                { Year: 2024, Month: "January", Neighborhood: "Neighborhood A", Value: 300 },
+                { Year: 2024, Month: "February", Neighborhood: "Neighborhood B", Value: 500 },
+                { Year: 2024, Month: "March", Neighborhood: "Neighborhood C", Value: 450 }
+            ]);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Graph Data');
+            XLSX.writeFile(workbook, 'GraphData.xlsx');
+        }
     </script>
 </head>
 <body>
     <div class="container">
         <h2>Graphs by Dates and Locations</h2>
-        <form action="graphs.html" method="GET">
+        <form action="/graphs" method="GET">
             <label for="dates">Add Year and Month:</label>
             <div class="date-container">
                 <div class="date-row">
@@ -146,18 +177,18 @@
                         <option value="2025">2025</option>
                     </select>
                     <select name="month[]">
-                        <option value="january">January</option>
-                        <option value="february">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="august">August</option>
-                        <option value="september">September</option>
-                        <option value="october">October</option>
-                        <option value="november">November</option>
-                        <option value="december">December</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
                     </select>
                 </div>
             </div>

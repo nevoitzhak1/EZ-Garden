@@ -3,157 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temperature & Humidity and Water Consumption Charts</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <h1 style="text-align: center;">Dashboard</h1>
-
-    <!-- Temperature & Humidity Chart -->
-    <div style="width: 80%; margin: auto; margin-bottom: 50px;">
-        <h2>Temperature & Humidity</h2>
-        <canvas id="tempHumidityChart"></canvas>
-    </div>
-
-    <!-- Water Consumption Chart -->
-    <div style="width: 80%; margin: auto;">
-        <h2>Water Consumption</h2>
-        <canvas id="waterConsumptionChart"></canvas>
-    </div>
-
-
-    <script>
-        // Fetch and display Temperature & Humidity Data
-        async function fetchTempHumidityData() {
-            try {
-                const response = await fetch('/data_sensor_by_date'); // כתובת ה-API
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-                const data = await response.json();
-        
-                // שלב 2: עיבוד הנתונים
-                const labels = data.map(entry => new Date(entry.SampleTime).toLocaleString()); // זמני מדידה
-                const temperatures = data.map(entry => entry.Temperature); // טמפרטורות
-                const humidities = data.map(entry => entry.Humidity); // לחות
-        
-                // שלב 3: יצירת הגרף
-                const ctx = document.getElementById('tempHumidityChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'Temperature (°C)',
-                                data: temperatures,
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                fill: true,
-                            },
-                            {
-                                label: 'Humidity (%)',
-                                data: humidities,
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                fill: true,
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            tooltip: {
-                                mode: 'index',
-                                intersect: false,
-                            },
-                        },
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Sample Time'
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Value'
-                                }
-                            }
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching Temperature & Humidity Data:", error);
-            }
+    <title>Graphs Comparison</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4; /* Light background */
+            color: #333; /* Dark text */
+            text-align: center;
         }
 
-        // Fetch and display Water Consumption Data
-        async function fetchWaterConsumptionData() {
-            const response = await fetch('/data_water');
-            const data = await response.json();
+        .container {
+            padding: 20px;
+        }
 
-            const labels = data.dates; // תאריכים כציר ה-X
-            const beforeInstallation = data.before_installation; // לפני התקנה
-            const afterInstallation = data.after_installation; // אחרי התקנה
+        h2 {
+            margin-bottom: 20px;
+            color: #333; /* Dark text */
+        }
 
-            const ctx = document.getElementById('waterConsumptionChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line', // גרף קווי
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background-color: #fff; /* White background for the graph */
+            border: 2px solid #ccc; /* Light gray border */
+        }
+
+        .export-buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Comparison of Water Savings Across Selected Months and Neighborhoods</h2>
+        <canvas id="graphCanvas" width="800" height="400"></canvas>
+        <div class="export-buttons">
+            <button onclick="exportToExcel()">Export to Excel</button>
+            <button onclick="exportToPDF()">Export to PDF</button>
+        </div>
+    </div>
+    <script>
+        // Function to get URL parameters
+        function getURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            const years = params.getAll('year[]');
+            const months = params.getAll('month[]');
+            const locations = params.getAll('locations[]');
+            return { years, months, locations };
+        }
+
+        // Mock data
+        const allNeighborhoods = ['Neighborhood A', 'Neighborhood B', 'Neighborhood C'];
+        const allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // Generating mock data with improvement starting from December 2024
+        const rawData = allNeighborhoods.map((neighborhood) => ({
+            label: neighborhood,
+            data: Array.from({ length: 12 }, (_, i) => {
+                const base = Math.floor(Math.random() * 500) + 300; // Base value
+                return i >= 11 ? base + Math.floor(Math.random() * 300) + 200 : base; // Improved from December
+            }),
+            backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.6)`
+        }));
+
+        let filteredData = [];
+        let filteredMonths = [];
+
+        // Create the graph
+        let chart; // Store the chart instance
+        function createGraph(datasets, labels) {
+            const ctx = document.getElementById('graphCanvas').getContext('2d');
+            if (chart) chart.destroy(); // Destroy previous chart if exists
+            chart = new Chart(ctx, {
+                type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: 'Before Installation (liters)',
-                            data: beforeInstallation,
-                            borderColor: 'rgba(255, 159, 64, 1)',
-                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                            fill: true,
-                        },
-                        {
-                            label: 'After Installation (liters)',
-                            data: afterInstallation,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            fill: true,
-                        }
-                    ]
+                    datasets: datasets
                 },
                 options: {
                     responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                        },
-                    },
                     scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Water Savings (Liters)'
+                            }
+                        },
                         x: {
                             title: {
                                 display: true,
-                                text: 'Date'
+                                text: 'Months'
                             }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
                         },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Water Consumption (liters)'
-                            }
+                        tooltip: {
+                            enabled: true
                         }
                     }
                 }
             });
         }
 
-        // Fetch both data sets and render the charts
-        fetchTempHumidityData();
-        fetchWaterConsumptionData();
+        // Filter data based on user selections
+        function filterData() {
+            const { years, months, locations } = getURLParams();
+
+            // Filter by neighborhoods
+            filteredData = rawData.filter((dataset) =>
+                locations.includes(dataset.label)
+            );
+
+            // Filter by months
+            filteredMonths = allMonths.filter((month, index) =>
+                months.some((m) => m.toLowerCase() === month.toLowerCase())
+            );
+
+            // Filter dataset data based on selected months
+            filteredData = filteredData.map((dataset) => ({
+                ...dataset,
+                data: dataset.data.filter((value, index) =>
+                    filteredMonths.includes(allMonths[index])
+                )
+            }));
+
+            // Create the graph
+            createGraph(filteredData, filteredMonths);
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            const worksheet = XLSX.utils.json_to_sheet(
+                filteredData.map((dataset) => {
+                    const row = { Neighborhood: dataset.label };
+                    filteredMonths.forEach((month, index) => {
+                        row[month] = dataset.data[index];
+                    });
+                    return row;
+                })
+            );
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Graph Data');
+            XLSX.writeFile(workbook, 'GraphData.xlsx');
+        }
+
+        // Export to PDF with the graph image
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            pdf.text('Graph Data', 10, 10);
+
+            // Add the graph image to the PDF
+            const canvas = document.getElementById('graphCanvas');
+            const graphImage = canvas.toDataURL('image/png');
+            pdf.addImage(graphImage, 'PNG', 10, 20, 180, 100);
+
+            // Add data as text
+            let yPosition = 130;
+            filteredData.forEach((dataset) => {
+                pdf.text(`Neighborhood: ${dataset.label}`, 10, yPosition);
+                yPosition += 10;
+
+                filteredMonths.forEach((month, index) => {
+                    pdf.text(`${month}: ${dataset.data[index]} liters`, 20, yPosition);
+                    yPosition += 10;
+                });
+
+                yPosition += 10; // Extra space between neighborhoods
+            });
+
+            pdf.save('GraphData.pdf');
+        }
+
+        // Run filtering and graph creation on page load
+        window.onload = filterData;
     </script>
 </body>
 </html>

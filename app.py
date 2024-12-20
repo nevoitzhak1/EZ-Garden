@@ -703,149 +703,92 @@ def plants_by_area():
 
 
 
-with open("static/water_consumption.json", "r") as file:
-    data_water = json.load(file)
-    
-    
-@app.route("/data_water")
-def get_water():
-    return jsonify(data_water)
+@app.route('/graphs_select_date', methods=['GET', 'POST'])
+def graphs_select_date():
+    if request.method == 'POST':
+        selected_years = request.form.getlist('year[]')
+        selected_months = request.form.getlist('month[]')
+        selected_locations = request.form.getlist('locations[]')
 
-
-
-def get_sensor_by_date(token, mac_address, start_date, end_date):
-    
-    end_date = datetime.utcnow()
-    start_date = end_date - timedelta(hours=24)
-    formatted_start_date = start_date.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    formatted_end_date = end_date.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    url = "https://atapi.atomation.net/api/v1/s2s/v1_0/sensors_readings"
-
-    if not mac_address:
-        print("MAC address is missing.")
-        return {"error": "MAC address is missing."}
-
-    # Format start and end dates
-    formatted_start_date = start_date.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    formatted_end_date = end_date.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-
-    print("Start Date:", formatted_start_date)
-    print("End Date:", formatted_end_date)
-
-    payload = {
-        "filters": {
-            "start_date": formatted_start_date,
-            "end_date": formatted_end_date,
-            "mac": [mac_address],
-            "createdAt": True
-        },
-        "limit": {
-            "page": 1,
-            "page_size": 1000
+        # Format the selected dates and locations
+        selected_data = {
+            "years": selected_years,
+            "months": selected_months,
+            "locations": selected_locations
         }
-    }
 
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
+        # Redirect to the graphs page with the data
+        return redirect('graphs', data=json.dumps(selected_data))
 
-    try:
-        # Sending request to API
-        response = requests.post(url, data=json.dumps(payload), headers=headers)
-        print(f"Response Status Code: {response.status_code}")
-
-        if response.status_code == 200:
-            data = response.json()
-            print("Response Data (Full):", data)
-
-            # Validate structure
-            if "data" in data and "readings_data" in data["data"]:
-                readings_data = data["data"]["readings_data"]
-                print(f"Number of readings: {len(readings_data)}")
-                if isinstance(readings_data, list) and len(readings_data) > 0:
-                    return readings_data  # Return all readings
-                else:
-                    print("No data found in the sensor.")
-                    return {"message": "No sensor data available."}
-            else:
-                print("Unexpected data structure from API response.")
-                return {"error": "Unexpected data structure from API response."}
-        else:
-            print(f"Error receiving sensor reading: {response.status_code}")
-            print("Error Response Text:", response.text)
-            return {"error": f"Sensor API returned status code {response.status_code}"}
-    except json.JSONDecodeError:
-        print("Response is not a valid JSON")
-        return {"error": "Response is not a valid JSON."}
-    except Exception as e:
-        print(f"General error: {e}")
-        return {"error": f"An unexpected error occurred: {e}"}
-    
-    
-    
-    
-@app.route("/data_sensor_by_date")
-def data_sensor_by_date():
-    sensor_token = cache.get("sensor_api_token")
-    if not sensor_token:
-        # אם אין טוקן, שלוף טוקן חדש
-        sensor_token = get_sensor_api_token()
-        if not sensor_token:
-            return jsonify({"error": "Unable to retrieve sensor token"}), 500
-
-        # שמור את הטוקן ב-Cache לשעה
-        cache.set("sensor_api_token", sensor_token, timeout=3600)
-
-    # בדוק אם יש נתונים ב-Cache
-    sensor_cache_key = "last_sensor_reading"
-    sensor_data = cache.get(sensor_cache_key)
-    if not sensor_data:
-        # שליפת נתוני החיישן
-        start_date = datetime(2024, 12, 10)  # תאריך התחלה לדוגמה
-        end_date = datetime(2024, 12, 19)  # תאריך סיום לדוגמה
-        print("Requesting sensor data...")
-        try:
-            sensor_data = get_sensor_by_date(sensor_token, "E9:19:79:09:A1:AD", start_date, end_date)
-            if sensor_data:
-                # שמור את הנתונים ב-Cache לדקה
-                cache.set(sensor_cache_key, sensor_data, timeout=60)
-            else:
-                print("No sensor data available.")
-                return jsonify({"error": "No sensor data available"}), 404
-        except Exception as e:
-            print(f"Error retrieving sensor data: {e}")
-            return jsonify({"error": f"Error retrieving sensor data: {e}"}), 500
-
-    # שליפת טמפרטורה, לחות ותאריך
-    try:
-        filtered_data = [
-            {
-                "Temperature": reading["Temperature"],
-                "Humidity": reading["Humidity"],
-                "SampleTime": reading["sample_time_utc"]
-            }
-            for reading in sensor_data
-        ]
-    except KeyError as e:
-        print(f"Missing expected key in sensor data: {e}")
-        return jsonify({"error": f"Missing key in sensor data: {e}"}), 500
-
-    print("Filtered Sensor Data:", filtered_data)
-    return jsonify(filtered_data)
-    
-
-
-
-
-
-
+    return render_template('graphs_select_date.html')
 
 
 @app.route('/graphs', methods=['GET', 'POST'])
-def grahps():
-    
-    return render_template('graphs.html')  
+def graphs():
+    data = request.args.get('data')
+    if data:
+        selected_data = json.loads(data)
+        years = selected_data.get("years", [])
+        months = selected_data.get("months", [])
+        locations = selected_data.get("locations", [])
+    else:
+        years, months, locations = [], [], []
+
+    return render_template('graphs.html', years=years, months=months, locations=locations)
+
+
+@app.route('/export_graph', methods=['POST'])
+def export_graph():
+    export_type = request.form.get('type')  # 'excel' or 'pdf'
+    graph_data = request.form.get('graph_data')  # Graph data passed as JSON
+
+    if export_type == 'excel':
+        # Generate Excel file
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+        sheet.title = "Graph Data"
+
+        # Add headers and data
+        graph_dict = json.loads(graph_data)
+        headers = list(graph_dict.keys())
+        sheet.append(headers)
+        rows = zip(*graph_dict.values())
+        for row in rows:
+            sheet.append(row)
+
+        # Save Excel file to memory
+        output = BytesIO()
+        workbook.save(output)
+        output.seek(0)
+
+        return Response(
+            output,
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": "attachment;filename=graph_data.xlsx"}
+        )
+
+    elif export_type == 'pdf':
+        from fpdf import FPDF
+
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt="Graph Data", ln=True, align='C')
+
+        graph_dict = json.loads(graph_data)
+        for key, values in graph_dict.items():
+            pdf.cell(200, 10, txt=f"{key}: {', '.join(map(str, values))}", ln=True)
+
+        output = BytesIO()
+        pdf.output(output)
+        output.seek(0)
+
+        return Response(
+            output,
+            mimetype="application/pdf",
+            headers={"Content-Disposition": "attachment;filename=graph_data.pdf"}
+        )
+  
 
   
 
@@ -1002,20 +945,6 @@ def data_sensor_by_date():
 
     print("Filtered Sensor Data:", filtered_data)
     return jsonify(filtered_data)
-    
-
-
-
-
-
-
-
-
-@app.route('/graphs', methods=['GET', 'POST'])
-def grahps():
-    
-    return render_template('graphs.html')
-
 
 
 
