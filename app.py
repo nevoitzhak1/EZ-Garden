@@ -3,7 +3,10 @@ import requests
 import asyncio
 import json
 import openpyxl
+import os
+import tempfile
 from io import BytesIO
+from fpdf import FPDF
 from datetime import datetime, timedelta
 from flask_mail import Mail, Message
 from firebase_admin import credentials, firestore
@@ -39,6 +42,42 @@ app.config['MAIL_PASSWORD'] = 'pyas pbfo xstu hksu'
 app.config['MAIL_DEFAULT_SENDER'] = 'ezgarden.sce@gmail.com'
 
 mail = Mail(app)
+
+
+@app.route('/send-email', methods=['POST'])
+def send_email():
+    try:
+        # קבלת האימייל מהבקשה
+        data = request.get_json()
+        email = data.get('email')
+        if not email:
+            return jsonify({'error': 'Email is required'}), 400
+
+        print("Creating email...")
+        # יצירת מייל
+        msg = Message('Graph Data Notification', sender=app.config['MAIL_USERNAME'], recipients=[email])
+        msg.body = """
+        Dear User,
+
+        The data you requested is now available. Please visit the application to view or download the data.
+
+        Best regards,
+        Your Team
+        """
+
+        print("Sending email...")
+        # שליחת המייל
+        mail.send(msg)
+        print("Email sent successfully.")
+
+        return jsonify({'message': f'Notification sent successfully to {email}'}), 200
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({'error': f'An error occurred: {str(e)}'}), 500
+
+
+
 
 
 
