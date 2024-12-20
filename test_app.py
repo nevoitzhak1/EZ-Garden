@@ -29,10 +29,11 @@ class TestFlaskApp(unittest.TestCase):
             response = c.post('/add_plant', data={
                 'area': 'Garden',
                 'type': 'Rose'
-            })
+             })
             self.assertEqual(response.status_code, 302)  # Redirect after success
 
 
+<<<<<<< Updated upstream
 
 #Nevo's unittest:
 
@@ -95,3 +96,23 @@ if __name__ == "__main__":
     unittest.main()
 
 
+=======
+#sahar's unittest:
+
+    def test_send_email_no_email(self):
+        # Sending a request without an email
+        response = self.app.post('/send-email', json={})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json, {'error': 'Email is required'})
+  
+
+#jimmy unittest:
+   def test_send_email_missing_email(self):
+    # Simulate a request with missing email
+      request = {'email': None}
+      response, status_code = send_email(request)
+      self.assertEqual(status_code, 400)
+      self.assertEqual(response.get('error'), 'Email is required')
+
+      
+>>>>>>> Stashed changes
