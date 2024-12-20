@@ -8,12 +8,13 @@ class TestFlaskApp(unittest.TestCase):
 
 #omer's unittest:
 
+
     # checking retuned code for reaching a valid adress for homepage:
-    def test_home_route(self):
-        response_code = self.app.get('/')
+    def test_planting_experiment_route(self):
+        response_code = self.app.get('/planting_experiment')
         self.assertEqual(response_code.status_code, 200)    
 
-#Claude unittest:
+    #Claude unittest:
 
     def test_add_plant_authenticated(self):
         """Test adding a plant when user is authenticated."""
