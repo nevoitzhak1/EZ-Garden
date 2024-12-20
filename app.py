@@ -201,6 +201,18 @@ def register_company():
 def home_company_3():
     return render_template('home_company_3.html')
 
+@app.route('/data_for_kids')
+def data_for_kids():
+    return render_template('data_for_kids.html')
+
+@app.route('/planting_experiment')
+def planting_experiment():
+    return render_template('planting_experiment.html')
+
+@app.route('/saving_water_tips')
+def saving_water_tips():
+    return render_template('saving_water_tips.html')
+
 
 
 @app.route('/home_company_2')
