@@ -60,7 +60,7 @@ class TestGetWater(unittest.TestCase):
         # בדיקה אם הקובץ נפתח כראוי
         mock_file.assert_called_once_with("static/water_consumption.json", "r")
 
-
+#Copile's unittest:
         mock_file.assert_called_once_with("static/water_consumption.json", "r")
         class TestGetWater(unittest.TestCase):
             def setUp(self):
