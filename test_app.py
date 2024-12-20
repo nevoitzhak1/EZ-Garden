@@ -2,7 +2,8 @@ import unittest
 from unittest.mock import patch, mock_open
 from flask import Flask, jsonify
 import json
-import app 
+import app
+from datetime import datetime
 
 class TestFlaskApp(unittest.TestCase):
     def setUp(self):
@@ -32,6 +33,7 @@ class TestFlaskApp(unittest.TestCase):
 
 
 
+#Nevo's unittest:
 
 class TestGetWater(unittest.TestCase):
     def setUp(self):
@@ -59,5 +61,46 @@ class TestGetWater(unittest.TestCase):
         mock_file.assert_called_once_with("static/water_consumption.json", "r")
 
 
+        mock_file.assert_called_once_with("static/water_consumption.json", "r")
+        class TestGetWater(unittest.TestCase):
+            def setUp(self):
+                app.app.testing = True
+                self.client = app.app.test_client()
+
+            @patch("builtins.open", new_callable=mock_open, read_data='{"dates": ["2023-12-01", "2023-12-02"], "before_installation": [100, 200], "after_installation": [80, 150]}')
+            def test_get_water(self, mock_file):
+                response = self.client.get("/data_water")
+                self.assertEqual(response.status_code, 200)
+                expected_data = {
+                    "dates": ["2023-12-01", "2023-12-02"],
+                    "before_installation": [100, 200],
+                    "after_installation": [80, 150],
+                }
+                self.assertEqual(response.json, expected_data)
+                mock_file.assert_called_once_with("static/water_consumption.json", "r")
+
+        class TestDataSensorByDate(unittest.TestCase):
+            def setUp(self):
+                app.app.testing = True
+                self.client = app.app.test_client()
+
+            @patch("app.get_sensor_api_token", return_value="mock_token")
+            @patch("app.get_sensor_by_date", return_value=[
+                {"Temperature": 25, "Humidity": 60, "sample_time_utc": "2024-12-10T00:00:00Z"},
+                {"Temperature": 26, "Humidity": 65, "sample_time_utc": "2024-12-11T00:00:00Z"}
+            ])
+            def test_data_sensor_by_date(self, mock_get_sensor_by_date, mock_get_sensor_api_token):
+                response = self.client.get("/data_sensor_by_date")
+                self.assertEqual(response.status_code, 200)
+                expected_data = [
+                    {"Temperature": 25, "Humidity": 60, "SampleTime": "2024-12-10T00:00:00Z"},
+                    {"Temperature": 26, "Humidity": 65, "SampleTime": "2024-12-11T00:00:00Z"}
+                ]
+                self.assertEqual(response.json, expected_data)
+                mock_get_sensor_api_token.assert_called_once()
+                mock_get_sensor_by_date.assert_called_once_with("mock_token", "E9:19:79:09:A1:AD", datetime(2024, 12, 10), datetime(2024, 12, 19))
+
 if __name__ == "__main__":
     unittest.main()
+
+
