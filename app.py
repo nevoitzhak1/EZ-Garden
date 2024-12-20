@@ -716,10 +716,91 @@ def plants_by_area():
 
 
 @app.route('/graphs_select_date', methods=['GET', 'POST'])
-def grahps_select_date():
-    
-    
-    return render_template('graphs_select_date.html')   
+def graphs_select_date():
+    if request.method == 'POST':
+        selected_years = request.form.getlist('year[]')
+        selected_months = request.form.getlist('month[]')
+        selected_locations = request.form.getlist('locations[]')
+
+        # Format the selected dates and locations
+        selected_data = {
+            "years": selected_years,
+            "months": selected_months,
+            "locations": selected_locations
+        }
+
+        # Redirect to the graphs page with the data
+        return redirect('graphs', data=json.dumps(selected_data))
+
+    return render_template('graphs_select_date.html')
+
+
+@app.route('/graphs', methods=['GET', 'POST'])
+def graphs():
+    data = request.args.get('data')
+    if data:
+        selected_data = json.loads(data)
+        years = selected_data.get("years", [])
+        months = selected_data.get("months", [])
+        locations = selected_data.get("locations", [])
+    else:
+        years, months, locations = [], [], []
+
+    return render_template('graphs.html', years=years, months=months, locations=locations)
+
+
+@app.route('/export_graph', methods=['POST'])
+def export_graph():
+    export_type = request.form.get('type')  # 'excel' or 'pdf'
+    graph_data = request.form.get('graph_data')  # Graph data passed as JSON
+
+    if export_type == 'excel':
+        # Generate Excel file
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+        sheet.title = "Graph Data"
+
+        # Add headers and data
+        graph_dict = json.loads(graph_data)
+        headers = list(graph_dict.keys())
+        sheet.append(headers)
+        rows = zip(*graph_dict.values())
+        for row in rows:
+            sheet.append(row)
+
+        # Save Excel file to memory
+        output = BytesIO()
+        workbook.save(output)
+        output.seek(0)
+
+        return Response(
+            output,
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": "attachment;filename=graph_data.xlsx"}
+        )
+
+    elif export_type == 'pdf':
+        from fpdf import FPDF
+
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt="Graph Data", ln=True, align='C')
+
+        graph_dict = json.loads(graph_data)
+        for key, values in graph_dict.items():
+            pdf.cell(200, 10, txt=f"{key}: {', '.join(map(str, values))}", ln=True)
+
+        output = BytesIO()
+        pdf.output(output)
+        output.seek(0)
+
+        return Response(
+            output,
+            mimetype="application/pdf",
+            headers={"Content-Disposition": "attachment;filename=graph_data.pdf"}
+        )
+  
 
   
 
@@ -876,20 +957,6 @@ def data_sensor_by_date():
 
     print("Filtered Sensor Data:", filtered_data)
     return jsonify(filtered_data)
-    
-
-
-
-
-
-
-
-
-@app.route('/graphs', methods=['GET', 'POST'])
-def grahps():
-    
-    return render_template('graphs.html')
-
 
 
 
